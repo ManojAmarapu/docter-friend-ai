@@ -1,9 +1,15 @@
-import { TrendingUp, Activity, Heart, Brain } from "lucide-react";
+import { useState } from "react";
+import { TrendingUp, Activity, Heart, Brain, BarChart3, AlertTriangle } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { SimpleBarChart, SimpleLineChart, SimplePieChart } from "./SimpleCharts";
 
 export function HealthInsights() {
+  const [userInput, setUserInput] = useState<string>("");
+  const [customInsights, setCustomInsights] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   // Sample data for charts
   const commonConditionsData = [
     { name: 'Common Cold', cases: 45, color: '#3B82F6' },
@@ -64,7 +70,119 @@ export function HealthInsights() {
     }
   ];
 
-  
+  const generateInsights = () => {
+    if (!userInput.trim()) return;
+    
+    setIsLoading(true);
+    
+    // Simulate AI processing
+    setTimeout(() => {
+      const input = userInput.toLowerCase();
+      let insights = {
+        userQuery: userInput,
+        recommendations: [],
+        riskFactors: [],
+        preventiveMeasures: [],
+        lifestyle: []
+      };
+      
+      if (input.includes("heart") || input.includes("cardiac") || input.includes("chest")) {
+        insights = {
+          userQuery: userInput,
+          recommendations: [
+            "Monitor blood pressure regularly",
+            "Maintain a heart-healthy diet low in sodium",
+            "Exercise for 30 minutes daily",
+            "Limit alcohol consumption",
+            "Quit smoking if applicable"
+          ],
+          riskFactors: [
+            "High cholesterol",
+            "High blood pressure", 
+            "Sedentary lifestyle",
+            "Smoking",
+            "Family history"
+          ],
+          preventiveMeasures: [
+            "Regular cardiovascular checkups",
+            "Stress management techniques",
+            "Mediterranean diet",
+            "Adequate sleep (7-9 hours)"
+          ],
+          lifestyle: [
+            "Walk 10,000 steps daily",
+            "Practice deep breathing",
+            "Stay hydrated",
+            "Limit processed foods"
+          ]
+        };
+      } else if (input.includes("diabetes") || input.includes("blood sugar") || input.includes("glucose")) {
+        insights = {
+          userQuery: userInput,
+          recommendations: [
+            "Monitor blood glucose levels regularly",
+            "Follow a balanced, low-carb diet",
+            "Exercise regularly to improve insulin sensitivity",
+            "Take medications as prescribed",
+            "Maintain a healthy weight"
+          ],
+          riskFactors: [
+            "Obesity",
+            "Family history of diabetes",
+            "Sedentary lifestyle",
+            "High blood pressure",
+            "Age over 45"
+          ],
+          preventiveMeasures: [
+            "Regular HbA1c testing",
+            "Annual eye exams",
+            "Foot care routine",
+            "Blood pressure monitoring"
+          ],
+          lifestyle: [
+            "Meal planning and portion control",
+            "Regular sleep schedule",
+            "Stress reduction activities",
+            "Stay hydrated with water"
+          ]
+        };
+      } else {
+        // General health insights
+        insights = {
+          userQuery: userInput,
+          recommendations: [
+            "Maintain a balanced diet with fruits and vegetables",
+            "Exercise regularly for overall fitness",
+            "Get adequate sleep (7-9 hours nightly)",
+            "Stay hydrated throughout the day",
+            "Schedule regular health checkups"
+          ],
+          riskFactors: [
+            "Sedentary lifestyle",
+            "Poor diet habits",
+            "Chronic stress",
+            "Lack of sleep",
+            "Smoking or excessive alcohol"
+          ],
+          preventiveMeasures: [
+            "Annual health screenings",
+            "Vaccination updates",
+            "Mental health check-ins",
+            "Preventive dental care"
+          ],
+          lifestyle: [
+            "Practice mindfulness or meditation",
+            "Social connections and support",
+            "Limit screen time before bed",
+            "Spend time outdoors daily"
+          ]
+        };
+      }
+      
+      setCustomInsights(insights);
+      setIsLoading(false);
+    }, 2000);
+  };
 
   return (
     <div className="space-y-6">
@@ -76,10 +194,133 @@ export function HealthInsights() {
             Health Insights Dashboard
           </CardTitle>
           <CardDescription>
-            Analytics and trends from HealthAI consultations
+            Get personalized health insights and analytics
           </CardDescription>
         </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Tell me about your health concerns or goals</label>
+              <Textarea
+                placeholder="Describe your health situation... (e.g., 'I want to improve my heart health', 'I'm at risk for diabetes', 'I want general wellness advice')"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                className="min-h-[80px] border-border focus:ring-primary resize-none"
+              />
+            </div>
+            <Button 
+              onClick={generateInsights}
+              disabled={!userInput.trim() || isLoading}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                  Generating Insights...
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="w-4 h-4" />
+                  Generate Health Insights
+                </div>
+              )}
+            </Button>
+          </div>
+        </CardContent>
       </Card>
+
+      {customInsights && (
+        <div className="space-y-6">
+          <Card className="shadow-soft border-border">
+            <CardHeader>
+              <CardTitle className="text-foreground">Personalized Health Insights</CardTitle>
+              <CardDescription>Based on: "{customInsights.userQuery}"</CardDescription>
+            </CardHeader>
+          </Card>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Recommendations */}
+            <Card className="shadow-soft border-border bg-gradient-to-br from-success/5 to-success/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-success">
+                  <Heart className="w-5 h-5" />
+                  Recommendations
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2">
+                  {customInsights.recommendations.map((rec: string, index: number) => (
+                    <li key={index} className="flex items-start gap-2 text-sm">
+                      <div className="w-2 h-2 bg-success rounded-full mt-2 flex-shrink-0" />
+                      <span className="text-foreground">{rec}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Risk Factors */}
+            <Card className="shadow-soft border-border bg-gradient-to-br from-warning/5 to-warning/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-warning">
+                  <AlertTriangle className="w-5 h-5" />
+                  Risk Factors
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2">
+                  {customInsights.riskFactors.map((risk: string, index: number) => (
+                    <li key={index} className="flex items-start gap-2 text-sm">
+                      <div className="w-2 h-2 bg-warning rounded-full mt-2 flex-shrink-0" />
+                      <span className="text-foreground">{risk}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Preventive Measures */}
+            <Card className="shadow-soft border-border bg-gradient-to-br from-primary/5 to-primary/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-primary">
+                  <Brain className="w-5 h-5" />
+                  Preventive Measures
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2">
+                  {customInsights.preventiveMeasures.map((measure: string, index: number) => (
+                    <li key={index} className="flex items-start gap-2 text-sm">
+                      <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+                      <span className="text-foreground">{measure}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Lifestyle Changes */}
+            <Card className="shadow-soft border-border bg-gradient-to-br from-accent/5 to-accent/10">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-accent">
+                  <Activity className="w-5 h-5" />
+                  Lifestyle Changes
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2">
+                  {customInsights.lifestyle.map((lifestyle: string, index: number) => (
+                    <li key={index} className="flex items-start gap-2 text-sm">
+                      <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0" />
+                      <span className="text-foreground">{lifestyle}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

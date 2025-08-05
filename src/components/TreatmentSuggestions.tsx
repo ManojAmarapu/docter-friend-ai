@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Stethoscope, Heart, AlertTriangle, Info } from "lucide-react";
+import { Stethoscope, Heart, AlertTriangle, Info, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -18,8 +18,9 @@ interface TreatmentData {
 }
 
 export function TreatmentSuggestions() {
-  const [selectedCondition, setSelectedCondition] = useState<string>("");
+  const [userInput, setUserInput] = useState<string>("");
   const [selectedTreatment, setSelectedTreatment] = useState<Treatment | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const treatmentData: TreatmentData = {
     "common-cold": {
@@ -144,17 +145,59 @@ export function TreatmentSuggestions() {
     }
   };
 
-  const conditions = [
-    { value: "common-cold", label: "Common Cold/Flu" },
-    { value: "headache", label: "Headache/Migraine" },
-    { value: "fever", label: "Fever" },
-    { value: "stomach-upset", label: "Stomach Upset/Nausea" },
-    { value: "minor-cuts", label: "Minor Cuts/Wounds" }
-  ];
-
-  const handleConditionSelect = (value: string) => {
-    setSelectedCondition(value);
-    setSelectedTreatment(treatmentData[value] || null);
+  const generateTreatment = () => {
+    if (!userInput.trim()) return;
+    
+    setIsLoading(true);
+    
+    // Simulate AI processing time
+    setTimeout(() => {
+      // Simple keyword matching to provide relevant treatment
+      const input = userInput.toLowerCase();
+      let matchedTreatment = null;
+      let category = "General";
+      
+      if (input.includes("cold") || input.includes("flu") || input.includes("cough") || input.includes("congestion")) {
+        matchedTreatment = treatmentData["common-cold"];
+      } else if (input.includes("headache") || input.includes("migraine") || input.includes("head pain")) {
+        matchedTreatment = treatmentData["headache"];
+      } else if (input.includes("fever") || input.includes("temperature") || input.includes("hot")) {
+        matchedTreatment = treatmentData["fever"];
+      } else if (input.includes("stomach") || input.includes("nausea") || input.includes("vomit") || input.includes("digestive")) {
+        matchedTreatment = treatmentData["stomach-upset"];
+      } else if (input.includes("cut") || input.includes("wound") || input.includes("bleeding") || input.includes("injury")) {
+        matchedTreatment = treatmentData["minor-cuts"];
+      } else {
+        // Generate a general treatment response
+        matchedTreatment = {
+          category: "General",
+          steps: [
+            "Rest and avoid strenuous activities",
+            "Stay hydrated with plenty of water",
+            "Monitor symptoms and note any changes",
+            "Apply ice or heat as appropriate for the condition",
+            "Consider over-the-counter medications if needed",
+            "Maintain good hygiene and hand washing"
+          ],
+          precautions: [
+            "Don't ignore worsening symptoms",
+            "Avoid self-medicating with strong medications",
+            "Don't exceed recommended dosages",
+            "Avoid activities that might worsen the condition"
+          ],
+          whenToSeekHelp: [
+            "Symptoms worsen or don't improve in 24-48 hours",
+            "Development of severe pain or discomfort",
+            "Signs of infection or complications",
+            "Difficulty breathing or swallowing",
+            "Any concerning or unusual symptoms"
+          ]
+        };
+      }
+      
+      setSelectedTreatment(matchedTreatment);
+      setIsLoading(false);
+    }, 1500);
   };
 
   return (
@@ -172,20 +215,31 @@ export function TreatmentSuggestions() {
         <CardContent>
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Select Condition</label>
-              <Select onValueChange={handleConditionSelect}>
-                <SelectTrigger className="w-full border-border focus:ring-primary">
-                  <SelectValue placeholder="Choose a condition for treatment guidance" />
-                </SelectTrigger>
-                <SelectContent>
-                  {conditions.map((condition) => (
-                    <SelectItem key={condition.value} value={condition.value}>
-                      {condition.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <label className="text-sm font-medium text-foreground">Describe Your Symptoms or Condition</label>
+              <Textarea
+                placeholder="Tell me what you're feeling... (e.g., 'I have a headache and feel nauseous', 'I cut my finger while cooking', 'I have a fever and sore throat')"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                className="min-h-[100px] border-border focus:ring-primary resize-none"
+              />
             </div>
+            <Button 
+              onClick={generateTreatment}
+              disabled={!userInput.trim() || isLoading}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                  Analyzing...
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Search className="w-4 h-4" />
+                  Get Treatment Suggestions
+                </div>
+              )}
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -195,12 +249,15 @@ export function TreatmentSuggestions() {
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span className="text-foreground">
-                {conditions.find(c => c.value === selectedCondition)?.label}
+                Treatment Recommendations
               </span>
               <Badge variant="outline" className="border-primary text-primary">
                 {selectedTreatment.category}
               </Badge>
             </CardTitle>
+            <CardDescription>
+              Based on your symptoms: "{userInput}"
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="treatment" className="w-full">
