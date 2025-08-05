@@ -7,9 +7,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppSidebar } from "@/components/app-sidebar";
 import Index from "./pages/Index";
 import Chat from "./pages/Chat";
-import Predict from "./pages/Predict";
-import Treatment from "./pages/Treatment";
-import Insights from "./pages/Insights";
+import QueryProcessor from "./pages/QueryProcessor";
+import DocumentManager from "./pages/DocumentManager";
+import ClaimInsights from "./pages/ClaimInsights";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,7 +32,7 @@ const App = () => (
                   <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center shadow-medical">
                     <span className="text-primary-foreground font-bold text-sm">H</span>
                   </div>
-                  <span className="font-semibold text-foreground">HealthAI</span>
+                  <span className="font-semibold text-foreground">DocumentAI</span>
                 </div>
               </header>
 
@@ -40,9 +40,10 @@ const App = () => (
               <main className="flex-1 p-6 overflow-auto">
                 <Routes>
                   <Route path="/" element={<Chat />} />
-                  <Route path="/predict" element={<Predict />} />
-                  <Route path="/treatment" element={<Treatment />} />
-                  <Route path="/insights" element={<Insights />} />
+                  <Route path="/chat" element={<Chat />} />
+                  <Route path="/query" element={<QueryProcessor />} />
+                  <Route path="/documents" element={<DocumentManager />} />
+                  <Route path="/insights" element={<ClaimInsights />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

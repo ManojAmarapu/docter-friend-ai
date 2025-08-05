@@ -16,7 +16,7 @@ export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hello! I'm HealthAI, your personal healthcare assistant. I can help you with health questions, symptoms analysis, and general medical information. How can I assist you today?",
+      text: "Hello! I'm DocumentAI, your LLM document processing assistant. I can help you process insurance queries, analyze policy documents, and provide structured decisions. Ask me about claim scenarios!",
       sender: 'ai',
       timestamp: new Date()
     }
@@ -169,7 +169,7 @@ export function ChatInterface() {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask me about your health concerns..."
+            placeholder="Ask about insurance claims, policy coverage, or document analysis..."
             className="flex-1 border-border focus:ring-primary"
             disabled={isTyping}
           />
