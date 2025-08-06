@@ -44,30 +44,101 @@ export const InsuranceQueryForm = () => {
     
     // Simulate AI processing
     setTimeout(() => {
-      // Mock structured response based on the query
-      const mockResult: QueryResult = {
-        decision: query.toLowerCase().includes("knee") ? "approved" : "rejected",
-        amount: query.toLowerCase().includes("knee") ? 45000 : undefined,
-        justification: query.toLowerCase().includes("knee") 
-          ? "Knee surgery is covered under the orthopedic procedures clause with a 3-month waiting period waiver for emergency cases."
-          : "The requested procedure is not covered under the current policy terms.",
-        clauses: [
+      // Advanced query parsing and structured response
+      const queryLower = query.toLowerCase();
+      const extractedAge = query.match(/(\d+)[-\s]*(year|yr|y)/i)?.[1] || query.match(/(\d+)m/i)?.[1];
+      const extractedLocation = query.match(/(pune|mumbai|delhi|bangalore|chennai|kolkata|hyderabad)/i)?.[1];
+      const extractedProcedure = query.match(/(surgery|operation|procedure|treatment)/i)?.[0];
+      const extractedPolicyDuration = query.match(/(\d+)[-\s]*(month|day|year)/i)?.[0];
+      
+      let decision: "approved" | "rejected" | "pending" = "pending";
+      let amount: number | undefined;
+      let justification = "";
+      let clauses = [];
+      
+      // Complex decision logic based on multiple factors
+      if (queryLower.includes("knee") || queryLower.includes("orthopedic")) {
+        const age = extractedAge ? parseInt(extractedAge) : 0;
+        const isEmergency = queryLower.includes("emergency") || queryLower.includes("urgent");
+        const policyAge = queryLower.includes("3-month") || queryLower.includes("3 month");
+        
+        if (age > 0 && age < 65 && (isEmergency || !policyAge)) {
+          decision = "approved";
+          amount = 45000;
+          justification = `Knee surgery approved for ${age}-year-old patient. Coverage includes orthopedic procedures with emergency waiver applied.`;
+        } else if (policyAge && !isEmergency) {
+          decision = "rejected";
+          justification = "Claim rejected due to 3-month waiting period for non-emergency orthopedic procedures.";
+        } else {
+          decision = "approved";
+          amount = 35000;
+          justification = "Partial coverage approved based on policy terms and patient profile.";
+        }
+        
+        clauses = [
           {
             clause_id: "ORTH-001",
             text: "Orthopedic procedures including knee surgery are covered after a 3-month waiting period, unless deemed emergency.",
-            relevance: "high"
+            relevance: "high" as const
           },
           {
-            clause_id: "GEO-002", 
-            text: "Procedures performed in Tier-1 cities like Pune are eligible for full coverage.",
-            relevance: "medium"
+            clause_id: "AGE-002",
+            text: "Patients below 65 years are eligible for full orthopedic coverage with emergency provisions.",
+            relevance: "high" as const
           }
-        ],
+        ];
+      } else if (queryLower.includes("cardiac") || queryLower.includes("heart")) {
+        decision = "approved";
+        amount = 75000;
+        justification = "Cardiac procedures are covered under critical illness benefits with immediate effect.";
+        clauses = [
+          {
+            clause_id: "CARD-001",
+            text: "All cardiac procedures are covered immediately upon policy activation with no waiting period.",
+            relevance: "high" as const
+          }
+        ];
+      } else if (queryLower.includes("dental") || queryLower.includes("tooth")) {
+        decision = "rejected";
+        justification = "Dental procedures require specific dental coverage add-on not present in current policy.";
+        clauses = [
+          {
+            clause_id: "DENT-001",
+            text: "Dental procedures are excluded unless specific dental coverage is purchased as add-on.",
+            relevance: "high" as const
+          }
+        ];
+      } else {
+        decision = "pending";
+        justification = "Insufficient information provided. Please specify procedure type, patient age, and medical necessity.";
+        clauses = [
+          {
+            clause_id: "GEN-001",
+            text: "All claims require complete medical information for processing and approval.",
+            relevance: "medium" as const
+          }
+        ];
+      }
+      
+      // Add location-based clause if location detected
+      if (extractedLocation) {
+        clauses.push({
+          clause_id: "GEO-002",
+          text: `Procedures performed in Tier-1 cities like ${extractedLocation} are eligible for enhanced coverage rates.`,
+          relevance: "medium" as const
+        });
+      }
+      
+      const mockResult: QueryResult = {
+        decision,
+        amount,
+        justification,
+        clauses,
         extracted_info: {
-          age: 46,
-          procedure: "knee surgery",
-          location: "Pune",
-          policy_duration: "3 months"
+          age: extractedAge ? parseInt(extractedAge) : undefined,
+          procedure: extractedProcedure || "unspecified",
+          location: extractedLocation || "not specified",
+          policy_duration: extractedPolicyDuration || "not specified"
         }
       };
 

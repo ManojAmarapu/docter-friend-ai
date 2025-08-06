@@ -28,16 +28,50 @@ export const ClaimAnalytics = () => {
   const [insights, setInsights] = useState("");
 
   const generateInsights = () => {
+    if (!customQuery.trim()) return;
+    
+    const queryLower = customQuery.toLowerCase();
+    let approvalRate = "85%";
+    let costRange = "₹35,000-₹55,000";
+    let processingTime = "2-3 business days";
+    let riskLevel = "Low";
+    let recommendation = "Submit with standard documentation";
+    
+    // Analyze based on query content
+    if (queryLower.includes("emergency") || queryLower.includes("urgent")) {
+      approvalRate = "95%";
+      costRange = "₹50,000-₹1,00,000";
+      processingTime = "Same day";
+      recommendation = "Emergency processing - submit immediately with medical reports";
+    } else if (queryLower.includes("surgery") || queryLower.includes("procedure")) {
+      approvalRate = "88%";
+      costRange = "₹45,000-₹75,000";
+      if (queryLower.includes("pre-existing")) {
+        approvalRate = "65%";
+        riskLevel = "Medium";
+        recommendation = "Requires pre-authorization and medical history review";
+      }
+    } else if (queryLower.includes("dental") || queryLower.includes("cosmetic")) {
+      approvalRate = "45%";
+      costRange = "₹15,000-₹30,000";
+      riskLevel = "High";
+      recommendation = "Check if dental coverage add-on is active";
+    }
+    
     const mockInsights = `
 Based on your query "${customQuery}", here are the key insights:
 
-• **Coverage Analysis**: The mentioned procedure shows a 87% approval rate based on historical data
-• **Policy Alignment**: Your query matches 3 policy clauses with high confidence
-• **Cost Estimation**: Similar claims average ₹45,000-₹65,000 in coverage
-• **Processing Time**: Expected decision within 2-3 business days
-• **Risk Factors**: No red flags detected in the query parameters
+• **Coverage Analysis**: The mentioned scenario shows a ${approvalRate} approval rate based on historical data
+• **Policy Alignment**: Your query matches relevant policy clauses with high semantic similarity
+• **Cost Estimation**: Similar claims typically range ${costRange} in coverage
+• **Processing Time**: Expected decision within ${processingTime}
+• **Risk Assessment**: ${riskLevel} risk factors detected in the query parameters
+• **Document Requirements**: Standard claim form, medical reports, and bill itemization needed
 
-**Recommendation**: Submit claim with supporting documentation for expedited processing.
+**Recommendation**: ${recommendation}
+
+**Key Factors Identified**:
+${queryLower.includes('age') || /\d+/.test(queryLower) ? '• Age factor considered in eligibility assessment\n' : ''}${queryLower.includes('location') || queryLower.includes('city') ? '• Geographic location affects coverage rates\n' : ''}${queryLower.includes('policy') || queryLower.includes('month') || queryLower.includes('year') ? '• Policy duration impacts waiting period calculations\n' : ''}
     `;
     setInsights(mockInsights);
   };

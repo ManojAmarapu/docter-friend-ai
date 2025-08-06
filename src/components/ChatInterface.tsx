@@ -16,7 +16,7 @@ export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hello! I'm DocumentAI, your LLM document processing assistant. I can help you process insurance queries, analyze policy documents, and provide structured decisions. Ask me about claim scenarios!",
+      text: "Hello! I'm DocumentAI, your LLM document processing assistant. I can help you process insurance queries, analyze policy documents, and provide structured decisions with JSON responses. Try asking about claim scenarios like '46-year-old male, knee surgery in Pune, 3-month policy' or upload documents for analysis!",
       sender: 'ai',
       timestamp: new Date()
     }
@@ -41,27 +41,41 @@ export function ChatInterface() {
   const generateAIResponse = (userMessage: string): string => {
     const lowerMessage = userMessage.toLowerCase();
     
-    if (lowerMessage.includes('headache') || lowerMessage.includes('head')) {
-      return "For headaches, I recommend: 1) Stay hydrated - drink plenty of water, 2) Get adequate rest in a quiet, dark room, 3) Apply a cold or warm compress, 4) Consider over-the-counter pain relievers like acetaminophen or ibuprofen. If headaches persist or worsen, please consult a healthcare professional.";
+    // Insurance claim processing queries
+    if (lowerMessage.includes('claim') || lowerMessage.includes('insurance') || lowerMessage.includes('policy')) {
+      if (lowerMessage.includes('approve') || lowerMessage.includes('approved')) {
+        return "Based on your query, I've analyzed the claim against policy terms. The claim appears to meet coverage criteria. I would need to review the specific policy clauses, patient age, procedure type, and waiting period to provide a detailed decision with amount calculation.";
+      }
+      if (lowerMessage.includes('reject') || lowerMessage.includes('denied')) {
+        return "I can help analyze why a claim might be rejected. Common reasons include: exceeding policy limits, procedures not covered, insufficient waiting period, or missing documentation. Please provide more details about the specific case for detailed analysis.";
+      }
+      return "I can help process insurance claims and queries. Please provide details like patient age, procedure type, location, policy duration, and any specific coverage questions. I'll analyze against policy documents and provide structured decisions.";
     }
     
-    if (lowerMessage.includes('fever') || lowerMessage.includes('temperature')) {
-      return "For fever management: 1) Stay hydrated with water, clear broths, or electrolyte solutions, 2) Rest is crucial for recovery, 3) Use light clothing and keep room cool, 4) Consider fever reducers like acetaminophen or ibuprofen if needed. Seek medical attention if fever exceeds 103°F (39.4°C) or persists for more than 3 days.";
+    // Document analysis queries
+    if (lowerMessage.includes('document') || lowerMessage.includes('analyze') || lowerMessage.includes('extract')) {
+      return "I can analyze various document types including PDFs, contracts, and emails. I use semantic understanding to extract key information, identify relevant clauses, and provide structured responses. What type of document would you like me to process?";
     }
     
-    if (lowerMessage.includes('cold') || lowerMessage.includes('cough') || lowerMessage.includes('sneezing')) {
-      return "For cold symptoms: 1) Get plenty of rest to help your immune system fight the virus, 2) Stay hydrated with warm liquids like tea or soup, 3) Use a humidifier or breathe steam from hot shower, 4) Gargle with salt water for sore throat. Most colds resolve within 7-10 days. See a doctor if symptoms worsen or last longer than 2 weeks.";
+    // Query processing
+    if (lowerMessage.includes('query') || lowerMessage.includes('search') || lowerMessage.includes('find')) {
+      return "I can process natural language queries to find relevant information from documents. I parse queries to identify key details like age, procedure, location, and policy terms, then search using semantic matching rather than just keywords. Try asking about a specific scenario!";
     }
     
-    if (lowerMessage.includes('stomach') || lowerMessage.includes('nausea') || lowerMessage.includes('digestive')) {
-      return "For digestive issues: 1) Try the BRAT diet (Bananas, Rice, Applesauce, Toast), 2) Stay hydrated with small, frequent sips of water, 3) Avoid dairy, fatty, or spicy foods temporarily, 4) Consider ginger tea for nausea. If symptoms persist beyond 24-48 hours or you have severe pain, please consult a healthcare provider.";
+    // Age, procedure, location pattern matching
+    if (lowerMessage.match(/\d+/) && (lowerMessage.includes('year') || lowerMessage.includes('old'))) {
+      const age = lowerMessage.match(/\d+/)?.[0];
+      if (lowerMessage.includes('surgery') || lowerMessage.includes('procedure')) {
+        return `I've identified a ${age}-year-old patient query involving a medical procedure. To provide a complete analysis, I would evaluate this against policy clauses considering age-related coverage, procedure eligibility, waiting periods, and geographical factors. Would you like me to process this as a formal claim query?`;
+      }
     }
     
-    if (lowerMessage.includes('sleep') || lowerMessage.includes('insomnia')) {
-      return "For better sleep: 1) Maintain a consistent sleep schedule, 2) Create a relaxing bedtime routine, 3) Keep your bedroom cool, dark, and quiet, 4) Avoid screens 1 hour before bed, 5) Limit caffeine after 2 PM. If sleep problems persist, consider consulting a sleep specialist.";
+    // Policy and coverage queries
+    if (lowerMessage.includes('coverage') || lowerMessage.includes('eligible') || lowerMessage.includes('waiting')) {
+      return "I can help determine coverage eligibility by analyzing policy terms, waiting periods, geographical restrictions, and procedure classifications. Please provide the specific scenario details, and I'll evaluate against the relevant policy clauses.";
     }
     
-    return "Thank you for your question. While I can provide general health information, it's important to remember that I'm an AI assistant and cannot replace professional medical advice. For specific symptoms or concerns, please consult with a qualified healthcare professional. Is there anything else about general health and wellness I can help you with?";
+    return "I'm DocumentAI, specialized in processing insurance claims and document analysis. I can help with: analyzing policy documents, processing natural language queries, determining claim eligibility, extracting structured information from documents, and providing JSON responses with decisions and justifications. What would you like me to help you with?";
   };
 
   const handleSendMessage = async () => {

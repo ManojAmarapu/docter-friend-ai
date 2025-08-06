@@ -62,15 +62,27 @@ export const DocumentUploader = () => {
           )
         );
 
-        // Simulate processing
+        // Simulate advanced processing based on document type
         setTimeout(() => {
+          const doc = documents.find(d => d.id === docId);
+          const fileName = doc?.name.toLowerCase() || '';
+          
+          let clauseCount = 10;
+          if (fileName.includes('policy') || fileName.includes('insurance')) {
+            clauseCount = Math.floor(Math.random() * 30) + 20; // 20-50 clauses
+          } else if (fileName.includes('contract')) {
+            clauseCount = Math.floor(Math.random() * 20) + 15; // 15-35 clauses
+          } else if (fileName.includes('claim')) {
+            clauseCount = Math.floor(Math.random() * 15) + 5; // 5-20 clauses
+          }
+          
           setDocuments(prev => 
             prev.map(doc => 
               doc.id === docId 
                 ? { 
                     ...doc, 
                     status: "ready",
-                    extractedClauses: Math.floor(Math.random() * 50) + 10
+                    extractedClauses: clauseCount
                   } 
                 : doc
             )
@@ -78,9 +90,9 @@ export const DocumentUploader = () => {
           
           toast({
             title: "Document Processed",
-            description: "Document has been analyzed and is ready for queries",
+            description: `Document analyzed successfully with ${clauseCount} clauses extracted`,
           });
-        }, 3000);
+        }, 2500);
       }
     }, 200);
   };
