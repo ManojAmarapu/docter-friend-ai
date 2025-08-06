@@ -62,18 +62,29 @@ export const DocumentUploader = () => {
           )
         );
 
-        // Simulate advanced processing based on document type
+        // Advanced LLM processing simulation based on document type
         setTimeout(() => {
           const doc = documents.find(d => d.id === docId);
           const fileName = doc?.name.toLowerCase() || '';
           
           let clauseCount = 10;
+          let processingDetails = "General document analysis completed";
+          
           if (fileName.includes('policy') || fileName.includes('insurance')) {
-            clauseCount = Math.floor(Math.random() * 30) + 20; // 20-50 clauses
-          } else if (fileName.includes('contract')) {
-            clauseCount = Math.floor(Math.random() * 20) + 15; // 15-35 clauses
-          } else if (fileName.includes('claim')) {
-            clauseCount = Math.floor(Math.random() * 15) + 5; // 5-20 clauses
+            clauseCount = Math.floor(Math.random() * 30) + 25; // 25-55 clauses
+            processingDetails = "Insurance policy analyzed - coverage terms, exclusions, and conditions extracted";
+          } else if (fileName.includes('contract') || fileName.includes('agreement')) {
+            clauseCount = Math.floor(Math.random() * 20) + 18; // 18-38 clauses
+            processingDetails = "Contract analyzed - terms, obligations, and liability clauses identified";
+          } else if (fileName.includes('claim') || fileName.includes('application')) {
+            clauseCount = Math.floor(Math.random() * 15) + 8; // 8-23 clauses
+            processingDetails = "Claim document processed - medical procedures, costs, and eligibility data extracted";
+          } else if (fileName.includes('email') || fileName.includes('eml')) {
+            clauseCount = Math.floor(Math.random() * 10) + 5; // 5-15 key points
+            processingDetails = "Email communication analyzed - key decision points and references extracted";
+          } else if (fileName.includes('.pdf')) {
+            clauseCount = Math.floor(Math.random() * 25) + 15; // 15-40 clauses
+            processingDetails = "PDF document processed using OCR and semantic analysis";
           }
           
           setDocuments(prev => 
@@ -89,10 +100,10 @@ export const DocumentUploader = () => {
           );
           
           toast({
-            title: "Document Processed",
-            description: `Document analyzed successfully with ${clauseCount} clauses extracted`,
+            title: "LLM Processing Complete",
+            description: `${processingDetails}. ${clauseCount} key clauses/points extracted and indexed for semantic search.`,
           });
-        }, 2500);
+        }, 3000);
       }
     }, 200);
   };
@@ -142,18 +153,33 @@ export const DocumentUploader = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center">
-            <Upload className="w-8 h-8 mx-auto mb-4 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground mb-4">
-              Upload policy documents, contracts, or emails (PDF, DOC, DOCX, TXT)
+          <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-8 text-center hover:border-primary/50 transition-colors">
+            <Upload className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+            <p className="text-sm text-muted-foreground mb-6">
+              Upload policy documents, contracts, or emails for AI processing
             </p>
-            <Input
-              type="file"
-              multiple
-              accept=".pdf,.doc,.docx,.txt"
-              onChange={handleFileUpload}
-              className="max-w-xs mx-auto"
-            />
+            <div className="relative">
+              <Input
+                type="file"
+                multiple
+                accept=".pdf,.doc,.docx,.txt,.eml"
+                onChange={handleFileUpload}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                id="file-upload"
+              />
+              <Button 
+                asChild
+                className="bg-gradient-primary hover:shadow-glow transition-all duration-300 transform hover:scale-105 px-8 py-3"
+              >
+                <label htmlFor="file-upload" className="cursor-pointer flex items-center gap-2">
+                  <Upload className="w-4 h-4" />
+                  Choose Documents
+                </label>
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground mt-3">
+              Supports PDF, DOC, DOCX, TXT, and Email files
+            </p>
           </div>
         </CardContent>
       </Card>
