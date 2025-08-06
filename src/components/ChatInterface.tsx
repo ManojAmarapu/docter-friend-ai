@@ -16,7 +16,7 @@ export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hello! I'm DocumentAI, your LLM document processing assistant. I can help you process insurance queries, analyze policy documents, and provide structured decisions with JSON responses. Try asking about claim scenarios like '46-year-old male, knee surgery in Pune, 3-month policy' or upload documents for analysis!",
+      text: "Hello! I'm DocumentAI, your intelligent assistant. I can help with health questions, document analysis, insurance queries, and general conversations. Feel free to ask me anything - whether it's about symptoms, wellness advice, document processing, or just want to chat!",
       sender: 'ai',
       timestamp: new Date()
     }
@@ -44,42 +44,52 @@ export function ChatInterface() {
     // Greeting responses
     if (lowerMessage.includes('hi') || lowerMessage.includes('hello') || lowerMessage.includes('hey')) {
       const greetings = [
-        "Hello! I'm your LLM Document Processing assistant. I can help you analyze insurance policies, process claims, and extract key information from documents. What would you like me to help you with?",
-        "Hi there! I specialize in processing natural language queries for document analysis. You can ask me about insurance claims, policy coverage, or upload documents for analysis.",
-        "Hey! I'm here to help with document processing and insurance queries. Try asking about a specific claim scenario or upload a document to get started!"
+        "Hello! I'm DocumentAI, your intelligent assistant. I can help with health topics, document analysis, and general questions. What's on your mind?",
+        "Hi there! I'm here to help with health advice, document processing, or just have a conversation. How can I assist you today?",
+        "Hey! I'm your AI assistant ready to discuss health topics, analyze documents, or chat about anything. What would you like to know?"
       ];
       return greetings[Math.floor(Math.random() * greetings.length)];
     }
 
+    // Health-related queries
+    if (lowerMessage.includes('health') || lowerMessage.includes('symptoms') || lowerMessage.includes('medicine') || 
+        lowerMessage.includes('doctor') || lowerMessage.includes('treatment') || lowerMessage.includes('pain') ||
+        lowerMessage.includes('fever') || lowerMessage.includes('headache') || lowerMessage.includes('diet') ||
+        lowerMessage.includes('exercise') || lowerMessage.includes('wellness')) {
+      const healthResponses = [
+        "I can help with health-related questions! However, please remember that I'm an AI assistant and my advice shouldn't replace professional medical consultation. What specific health topic would you like to discuss?",
+        "Health is important! I can provide general health information and suggestions. For specific symptoms or conditions, it's always best to consult with a healthcare professional. What health question do you have?",
+        "I'd be happy to discuss health topics with you. Whether it's about nutrition, exercise, general wellness, or symptoms, I can provide helpful information. What would you like to know about?"
+      ];
+      return healthResponses[Math.floor(Math.random() * healthResponses.length)];
+    }
+
     // Help requests
     if (lowerMessage.includes('help') || lowerMessage.includes('what can you do')) {
-      return "I can help you with:\n• Processing natural language insurance queries\n• Analyzing policy documents and contracts\n• Extracting clauses and key information\n• Determining claim eligibility and amounts\n• Providing structured JSON responses with justifications\n\nTry asking: '25-year-old female, dental surgery in Mumbai, 6-month policy'";
+      return "I can help you with:\n• Health and wellness questions\n• Document analysis and processing\n• Insurance policy queries\n• General conversations and advice\n• Processing natural language queries\n\nJust ask me anything you'd like to know!";
     }
 
     // Thank you responses
     if (lowerMessage.includes('thank') || lowerMessage.includes('thanks')) {
-      return "You're welcome! Feel free to ask me about any insurance queries or document analysis needs. I'm here to help with claim processing and policy analysis.";
+      const thankResponses = [
+        "You're very welcome! I'm here whenever you need help with health questions, documents, or just want to chat.",
+        "Happy to help! Feel free to ask me about anything else - health, documents, or general questions.",
+        "My pleasure! Is there anything else I can assist you with today?"
+      ];
+      return thankResponses[Math.floor(Math.random() * thankResponses.length)];
     }
 
-    // Specific query pattern matching (age + procedure + location)
-    const ageMatch = lowerMessage.match(/(\d+)[-\s]?(year|yr|y|m|f|male|female)/i);
-    const locationMatch = lowerMessage.match(/\b(mumbai|pune|delhi|bangalore|chennai|kolkata|hyderabad|ahmedabad|jaipur|lucknow)\b/i);
-    const procedureMatch = lowerMessage.match(/\b(surgery|operation|treatment|procedure|therapy|consultation|checkup|scan|test)\b/i);
-    
-    if (ageMatch && (procedureMatch || locationMatch)) {
-      const age = ageMatch[1];
-      const procedure = procedureMatch?.[1] || 'medical procedure';
-      const location = locationMatch?.[1] || 'specified location';
-      
-      return `I've parsed your query: ${age}-year-old patient requiring ${procedure} in ${location}. Based on standard policy analysis, I would evaluate:\n\n✓ Age eligibility criteria\n✓ Procedure coverage terms\n✓ Geographic restrictions\n✓ Waiting period requirements\n\nWould you like me to process this as a formal claim with JSON response including decision, amount, and clause justifications?`;
+    // Medical procedure queries
+    if (lowerMessage.includes('surgery') || lowerMessage.includes('operation') || lowerMessage.includes('procedure')) {
+      return "If you're asking about a medical procedure, I can provide general information. However, for specific medical advice, please consult with a qualified healthcare professional. What procedure are you curious about?";
     }
 
     // Insurance claim processing queries
     if (lowerMessage.includes('claim') || lowerMessage.includes('insurance') || lowerMessage.includes('policy')) {
       const responses = [
-        "I can process insurance claims by analyzing policy documents against your query. Please provide patient details like age, procedure type, location, and policy duration for structured analysis.",
-        "For claim processing, I'll parse your natural language query, extract key details, match against policy clauses, and provide a JSON response with decision and justification.",
-        "I specialize in insurance claim evaluation. Give me details like '30M, heart surgery, Delhi, 2-year policy' and I'll provide structured decision analysis."
+        "I can help with insurance-related questions! Whether it's understanding policy terms, claim processes, or coverage details, feel free to ask.",
+        "Insurance can be complex. I'm here to help explain policies, claims, and coverage. What specific insurance question do you have?",
+        "I can assist with insurance queries and policy analysis. What would you like to know about your insurance or claims?"
       ];
       return responses[Math.floor(Math.random() * responses.length)];
     }
@@ -87,27 +97,23 @@ export function ChatInterface() {
     // Document analysis queries
     if (lowerMessage.includes('document') || lowerMessage.includes('analyze') || lowerMessage.includes('extract') || lowerMessage.includes('upload')) {
       const responses = [
-        "I can analyze various document types including insurance policies, contracts, and emails. Upload documents in the Document Manager section, and I'll extract relevant clauses and key information.",
-        "For document analysis, I use semantic understanding to identify important clauses, coverage terms, and policy conditions. What type of document would you like me to process?",
-        "I extract structured information from unstructured documents. Upload PDFs, Word files, or emails, and I'll provide clause mapping and semantic analysis."
+        "I can analyze documents for you! Upload them in the Document Manager section, and I'll help extract key information and analyze the content.",
+        "Document analysis is one of my strengths. I can process various file types and extract meaningful information. What documents would you like me to analyze?",
+        "I'm great at understanding and analyzing documents. Upload your files and I'll help you understand the key points and important information."
       ];
       return responses[Math.floor(Math.random() * responses.length)];
     }
-    
-    // JSON/structured response queries
-    if (lowerMessage.includes('json') || lowerMessage.includes('structured') || lowerMessage.includes('decision')) {
-      return "I provide structured JSON responses with:\n• Decision (approved/rejected)\n• Amount (if applicable)\n• Justification with specific clause references\n• Confidence scores and risk assessments\n\nTry giving me a claim scenario for a sample JSON response!";
-    }
 
-    // Default varied responses for other inputs
-    const defaultResponses = [
-      "I'm an LLM Document Processing System designed for insurance and legal document analysis. Ask me about claim scenarios, policy coverage, or document processing!",
-      "I specialize in processing natural language queries against large document sets. Try asking about insurance claims or upload documents for analysis.",
-      "I can help with semantic document search, clause extraction, and claim decision making. What specific query or document would you like me to process?",
-      "As an AI document processor, I excel at understanding complex queries and mapping them to relevant policy clauses. How can I assist you today?"
+    // General conversation responses
+    const conversationalResponses = [
+      "That's interesting! I'm here to help with various topics. Is there something specific you'd like to know or discuss?",
+      "I'm listening! Whether it's about health, documents, or just general questions, I'm here to help. What's on your mind?",
+      "I'd be happy to help you with that! Can you tell me more about what you're looking for?",
+      "Feel free to ask me anything! I can discuss health topics, analyze documents, or just have a friendly conversation.",
+      "I'm here to assist! Whether you need health advice, document analysis, or general information, just let me know how I can help."
     ];
     
-    return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+    return conversationalResponses[Math.floor(Math.random() * conversationalResponses.length)];
   };
 
   const handleSendMessage = async () => {

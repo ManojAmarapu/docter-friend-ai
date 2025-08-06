@@ -4,9 +4,9 @@ const Chat = () => {
   return (
     <div className="h-full">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Document AI Chat</h1>
+        <h1 className="text-3xl font-bold text-foreground mb-2">DocumentAI Assistant</h1>
         <p className="text-muted-foreground">
-          Ask me about insurance claims, policy coverage, document analysis, or natural language queries.
+          Your intelligent assistant for health advice, document analysis, and general conversations.
         </p>
       </div>
       <ChatInterface />

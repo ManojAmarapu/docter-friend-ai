@@ -276,13 +276,6 @@ export const InsuranceQueryForm = () => {
               </div>
             </div>
 
-            {/* JSON Output */}
-            <div>
-              <h4 className="font-semibold mb-2">JSON Response</h4>
-              <pre className="bg-muted p-3 rounded-md text-xs overflow-auto">
-                {JSON.stringify(result, null, 2)}
-              </pre>
-            </div>
           </CardContent>
         </Card>
       )}

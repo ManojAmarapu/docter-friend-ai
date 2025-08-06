@@ -45,6 +45,31 @@ export const DocumentUploader = () => {
     event.target.value = '';
   };
 
+  const analyzeDocumentContent = (fileName: string, fileType: string) => {
+    const lowerName = fileName.toLowerCase();
+    
+    // Health/Medical document keywords
+    const healthKeywords = ['medical', 'health', 'patient', 'diagnosis', 'prescription', 'treatment', 
+                           'hospital', 'clinic', 'doctor', 'medicine', 'surgery', 'therapy', 
+                           'insurance', 'policy', 'claim', 'coverage', 'benefit'];
+    
+    const hasHealthContent = healthKeywords.some(keyword => lowerName.includes(keyword));
+    
+    if (hasHealthContent || lowerName.includes('policy') || lowerName.includes('insurance')) {
+      return {
+        isValid: true,
+        type: 'health-related',
+        analysis: 'Health/Insurance document detected - ready for processing'
+      };
+    } else {
+      return {
+        isValid: false,
+        type: 'non-health',
+        analysis: 'This document does not appear to be health or insurance related'
+      };
+    }
+  };
+
   const simulateUpload = (docId: string) => {
     // Simulate upload progress
     let progress = 0;
@@ -62,48 +87,67 @@ export const DocumentUploader = () => {
           )
         );
 
-        // Advanced LLM processing simulation based on document type
+        // Analyze document content
         setTimeout(() => {
           const doc = documents.find(d => d.id === docId);
-          const fileName = doc?.name.toLowerCase() || '';
+          if (!doc) return;
           
+          const analysis = analyzeDocumentContent(doc.name, doc.type);
+          
+          if (!analysis.isValid) {
+            // Mark as error for non-health documents
+            setDocuments(prev => 
+              prev.map(d => 
+                d.id === docId 
+                  ? { ...d, status: "error" } 
+                  : d
+              )
+            );
+            
+            toast({
+              title: "Document Type Not Supported",
+              description: "Please upload health, medical, or insurance related documents only.",
+              variant: "destructive"
+            });
+            return;
+          }
+
+          // Process valid health/insurance documents
+          const fileName = doc.name.toLowerCase();
           let clauseCount = 10;
-          let processingDetails = "General document analysis completed";
+          let processingDetails = "";
           
           if (fileName.includes('policy') || fileName.includes('insurance')) {
-            clauseCount = Math.floor(Math.random() * 30) + 25; // 25-55 clauses
-            processingDetails = "Insurance policy analyzed - coverage terms, exclusions, and conditions extracted";
-          } else if (fileName.includes('contract') || fileName.includes('agreement')) {
-            clauseCount = Math.floor(Math.random() * 20) + 18; // 18-38 clauses
-            processingDetails = "Contract analyzed - terms, obligations, and liability clauses identified";
-          } else if (fileName.includes('claim') || fileName.includes('application')) {
-            clauseCount = Math.floor(Math.random() * 15) + 8; // 8-23 clauses
-            processingDetails = "Claim document processed - medical procedures, costs, and eligibility data extracted";
-          } else if (fileName.includes('email') || fileName.includes('eml')) {
-            clauseCount = Math.floor(Math.random() * 10) + 5; // 5-15 key points
-            processingDetails = "Email communication analyzed - key decision points and references extracted";
-          } else if (fileName.includes('.pdf')) {
-            clauseCount = Math.floor(Math.random() * 25) + 15; // 15-40 clauses
-            processingDetails = "PDF document processed using OCR and semantic analysis";
+            clauseCount = Math.floor(Math.random() * 30) + 25;
+            processingDetails = "✅ Insurance policy analyzed successfully!\n• Coverage terms identified\n• Exclusions mapped\n• Claim procedures extracted\n• Eligibility criteria documented";
+          } else if (fileName.includes('medical') || fileName.includes('health')) {
+            clauseCount = Math.floor(Math.random() * 20) + 15;
+            processingDetails = "✅ Medical document processed!\n• Patient information extracted\n• Treatment details identified\n• Medical procedures documented\n• Diagnosis information captured";
+          } else if (fileName.includes('claim')) {
+            clauseCount = Math.floor(Math.random() * 15) + 10;
+            processingDetails = "✅ Claim document analyzed!\n• Claim details extracted\n• Medical procedures identified\n• Cost information captured\n• Eligibility status determined";
+          } else {
+            clauseCount = Math.floor(Math.random() * 20) + 12;
+            processingDetails = "✅ Health-related document processed!\n• Key information extracted\n• Relevant clauses identified\n• Content categorized\n• Ready for querying";
           }
           
           setDocuments(prev => 
-            prev.map(doc => 
-              doc.id === docId 
+            prev.map(d => 
+              d.id === docId 
                 ? { 
-                    ...doc, 
+                    ...d, 
                     status: "ready",
                     extractedClauses: clauseCount
                   } 
-                : doc
+                : d
             )
           );
           
           toast({
-            title: "LLM Processing Complete",
-            description: `${processingDetails}. ${clauseCount} key clauses/points extracted and indexed for semantic search.`,
+            title: "Document Processing Complete",
+            description: processingDetails,
           });
-        }, 3000);
+        }, 2500);
       }
     }, 200);
   };
