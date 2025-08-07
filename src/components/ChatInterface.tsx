@@ -43,77 +43,85 @@ export function ChatInterface() {
     
     // Greeting responses
     if (lowerMessage.includes('hi') || lowerMessage.includes('hello') || lowerMessage.includes('hey')) {
-      const greetings = [
-        "Hello! I'm DocumentAI, your intelligent assistant. I can help with health topics, document analysis, and general questions. What's on your mind?",
-        "Hi there! I'm here to help with health advice, document processing, or just have a conversation. How can I assist you today?",
-        "Hey! I'm your AI assistant ready to discuss health topics, analyze documents, or chat about anything. What would you like to know?"
-      ];
-      return greetings[Math.floor(Math.random() * greetings.length)];
+      return "Hello! I'm HealthAI, your intelligent medical assistant. I can help with health questions, symptoms analysis, wellness advice, and medical document processing. What can I help you with today?";
     }
 
-    // Health-related queries
-    if (lowerMessage.includes('health') || lowerMessage.includes('symptoms') || lowerMessage.includes('medicine') || 
-        lowerMessage.includes('doctor') || lowerMessage.includes('treatment') || lowerMessage.includes('pain') ||
-        lowerMessage.includes('fever') || lowerMessage.includes('headache') || lowerMessage.includes('diet') ||
-        lowerMessage.includes('exercise') || lowerMessage.includes('wellness')) {
-      const healthResponses = [
-        "I can help with health-related questions! However, please remember that I'm an AI assistant and my advice shouldn't replace professional medical consultation. What specific health topic would you like to discuss?",
-        "Health is important! I can provide general health information and suggestions. For specific symptoms or conditions, it's always best to consult with a healthcare professional. What health question do you have?",
-        "I'd be happy to discuss health topics with you. Whether it's about nutrition, exercise, general wellness, or symptoms, I can provide helpful information. What would you like to know about?"
-      ];
-      return healthResponses[Math.floor(Math.random() * healthResponses.length)];
+    // Specific health conditions and symptoms
+    if (lowerMessage.includes('headache') || lowerMessage.includes('migraine')) {
+      return "Headaches can have various causes - stress, dehydration, eye strain, or underlying conditions. For persistent headaches, I'd recommend consulting a healthcare provider. In the meantime, try staying hydrated, getting adequate rest, and managing stress. Would you like specific tips for headache relief?";
+    }
+
+    if (lowerMessage.includes('fever') || lowerMessage.includes('temperature')) {
+      return "Fever is your body's natural response to fighting infection. Normal body temperature is around 98.6°F (37°C). If you have a fever above 101°F (38.3°C) that persists, please consult a healthcare provider. Stay hydrated and rest. What other symptoms are you experiencing?";
+    }
+
+    if (lowerMessage.includes('pain') || lowerMessage.includes('hurt') || lowerMessage.includes('ache')) {
+      return "Pain can indicate various conditions depending on location and severity. For acute or severe pain, please seek immediate medical attention. For general aches, rest, ice/heat therapy, and over-the-counter pain relievers may help. Can you describe where the pain is located?";
+    }
+
+    if (lowerMessage.includes('diet') || lowerMessage.includes('nutrition') || lowerMessage.includes('food')) {
+      return "Good nutrition is essential for health! A balanced diet should include fruits, vegetables, whole grains, lean proteins, and healthy fats. Stay hydrated and limit processed foods. Do you have specific dietary goals or restrictions I can help with?";
+    }
+
+    if (lowerMessage.includes('exercise') || lowerMessage.includes('workout') || lowerMessage.includes('fitness')) {
+      return "Regular exercise is crucial for physical and mental health! Aim for at least 150 minutes of moderate aerobic activity weekly, plus strength training twice a week. Start gradually if you're new to exercise. What type of physical activity interests you?";
+    }
+
+    if (lowerMessage.includes('sleep') || lowerMessage.includes('tired') || lowerMessage.includes('insomnia')) {
+      return "Quality sleep is vital for health! Adults need 7-9 hours nightly. Good sleep hygiene includes: consistent bedtime, comfortable environment, limiting screens before bed, and avoiding caffeine late in the day. Are you having trouble falling asleep or staying asleep?";
+    }
+
+    if (lowerMessage.includes('stress') || lowerMessage.includes('anxiety') || lowerMessage.includes('mental health')) {
+      return "Mental health is just as important as physical health. Stress management techniques include deep breathing, meditation, regular exercise, and talking to someone you trust. If you're experiencing persistent anxiety or depression, please consider speaking with a mental health professional. What's causing you stress?";
+    }
+
+    // Medicine and treatment queries
+    if (lowerMessage.includes('medicine') || lowerMessage.includes('medication') || lowerMessage.includes('drug')) {
+      return "I can provide general information about medications, but never replace professional medical advice. Always consult your doctor or pharmacist about specific medications, dosages, and interactions. What medication information are you looking for?";
+    }
+
+    // Emergency situations
+    if (lowerMessage.includes('emergency') || lowerMessage.includes('urgent') || lowerMessage.includes('severe')) {
+      return "For medical emergencies, please call emergency services immediately (911 in the US). Signs requiring immediate attention include: chest pain, difficulty breathing, severe bleeding, loss of consciousness, or stroke symptoms. Is this an emergency situation?";
+    }
+
+    // General health queries
+    if (lowerMessage.includes('health') || lowerMessage.includes('symptoms') || lowerMessage.includes('doctor') || 
+        lowerMessage.includes('treatment') || lowerMessage.includes('wellness') || lowerMessage.includes('medical')) {
+      return "I'm here to help with health-related questions! I can provide general health information, wellness tips, and guidance on when to seek professional care. Remember, I'm an AI assistant and my advice doesn't replace professional medical consultation. What specific health topic interests you?";
     }
 
     // Help requests
     if (lowerMessage.includes('help') || lowerMessage.includes('what can you do')) {
-      return "I can help you with:\n• Health and wellness questions\n• Document analysis and processing\n• Insurance policy queries\n• General conversations and advice\n• Processing natural language queries\n\nJust ask me anything you'd like to know!";
+      return "I'm HealthAI, and I can help you with:\n• Health and wellness guidance\n• Symptom information and advice\n• Medical document analysis\n• Nutrition and fitness tips\n• When to seek professional care\n• General health education\n\nWhat health topic would you like to explore?";
     }
 
     // Thank you responses
     if (lowerMessage.includes('thank') || lowerMessage.includes('thanks')) {
-      const thankResponses = [
-        "You're very welcome! I'm here whenever you need help with health questions, documents, or just want to chat.",
-        "Happy to help! Feel free to ask me about anything else - health, documents, or general questions.",
-        "My pleasure! Is there anything else I can assist you with today?"
-      ];
-      return thankResponses[Math.floor(Math.random() * thankResponses.length)];
+      return "You're very welcome! I'm always here to help with your health questions and concerns. Stay healthy and feel free to ask anything else!";
     }
 
-    // Medical procedure queries
-    if (lowerMessage.includes('surgery') || lowerMessage.includes('operation') || lowerMessage.includes('procedure')) {
-      return "If you're asking about a medical procedure, I can provide general information. However, for specific medical advice, please consult with a qualified healthcare professional. What procedure are you curious about?";
+    // Document queries
+    if (lowerMessage.includes('document') || lowerMessage.includes('analyze') || lowerMessage.includes('upload')) {
+      return "I can analyze medical documents, lab reports, prescriptions, and health records. Upload your documents in the Document Manager section, and I'll help extract key information and provide insights. What type of document would you like me to analyze?";
     }
 
-    // Insurance claim processing queries
+    // Insurance queries
     if (lowerMessage.includes('claim') || lowerMessage.includes('insurance') || lowerMessage.includes('policy')) {
-      const responses = [
-        "I can help with insurance-related questions! Whether it's understanding policy terms, claim processes, or coverage details, feel free to ask.",
-        "Insurance can be complex. I'm here to help explain policies, claims, and coverage. What specific insurance question do you have?",
-        "I can assist with insurance queries and policy analysis. What would you like to know about your insurance or claims?"
-      ];
-      return responses[Math.floor(Math.random() * responses.length)];
-    }
-    
-    // Document analysis queries
-    if (lowerMessage.includes('document') || lowerMessage.includes('analyze') || lowerMessage.includes('extract') || lowerMessage.includes('upload')) {
-      const responses = [
-        "I can analyze documents for you! Upload them in the Document Manager section, and I'll help extract key information and analyze the content.",
-        "Document analysis is one of my strengths. I can process various file types and extract meaningful information. What documents would you like me to analyze?",
-        "I'm great at understanding and analyzing documents. Upload your files and I'll help you understand the key points and important information."
-      ];
-      return responses[Math.floor(Math.random() * responses.length)];
+      return "I can help with medical insurance questions, including understanding coverage, claim processes, and policy benefits. What insurance-related question do you have?";
     }
 
-    // General conversation responses
-    const conversationalResponses = [
-      "That's interesting! I'm here to help with various topics. Is there something specific you'd like to know or discuss?",
-      "I'm listening! Whether it's about health, documents, or just general questions, I'm here to help. What's on your mind?",
-      "I'd be happy to help you with that! Can you tell me more about what you're looking for?",
-      "Feel free to ask me anything! I can discuss health topics, analyze documents, or just have a friendly conversation.",
-      "I'm here to assist! Whether you need health advice, document analysis, or general information, just let me know how I can help."
-    ];
-    
-    return conversationalResponses[Math.floor(Math.random() * conversationalResponses.length)];
+    // General conversation - more contextual
+    if (lowerMessage.includes('how are you') || lowerMessage.includes('how do you feel')) {
+      return "I'm doing well and ready to help! As an AI health assistant, I'm here 24/7 to support your health and wellness journey. How are you feeling today?";
+    }
+
+    if (lowerMessage.includes('what') || lowerMessage.includes('how') || lowerMessage.includes('why') || lowerMessage.includes('when')) {
+      return "I'd be happy to help answer your question! Could you provide more specific details about what you'd like to know? I'm especially knowledgeable about health, wellness, and medical topics.";
+    }
+
+    // Default response that encourages health-related conversation
+    return "I'm here to help with your health and wellness needs! Whether you have questions about symptoms, need wellness advice, want to discuss nutrition and fitness, or need help with medical documents, I'm ready to assist. What's on your mind today?";
   };
 
   const handleSendMessage = async () => {
@@ -155,7 +163,7 @@ export function ChatInterface() {
     <div className="flex flex-col h-full">
       {/* Chat Messages */}
       <Card className="flex-1 mb-4 border-border shadow-soft">
-        <ScrollArea ref={scrollAreaRef} className="h-[500px] p-4">
+        <ScrollArea ref={scrollAreaRef} className={`${messages.length <= 2 ? 'h-[400px]' : 'h-[500px]'} p-4`}>
           <div className="space-y-4">
             {messages.map((message) => (
               <div
@@ -221,7 +229,7 @@ export function ChatInterface() {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask about insurance claims, policy coverage, or document analysis..."
+            placeholder="Ask about your health, symptoms, wellness tips, or medical documents..."
             className="flex-1 border-border focus:ring-primary"
             disabled={isTyping}
           />
