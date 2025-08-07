@@ -16,7 +16,7 @@ export function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
-      text: "Hello! I'm DocumentAI, your intelligent assistant. I can help with health questions, document analysis, insurance queries, and general conversations. Feel free to ask me anything - whether it's about symptoms, wellness advice, document processing, or just want to chat!",
+      text: "Hello! I'm HealthAI, your personal healthcare assistant. I can help you with health questions, symptoms analysis, and general medical information. How can I assist you today?",
       sender: 'ai',
       timestamp: new Date()
     }
@@ -41,87 +41,27 @@ export function ChatInterface() {
   const generateAIResponse = (userMessage: string): string => {
     const lowerMessage = userMessage.toLowerCase();
     
-    // Greeting responses
-    if (lowerMessage.includes('hi') || lowerMessage.includes('hello') || lowerMessage.includes('hey')) {
-      return "Hello! I'm HealthAI, your intelligent medical assistant. I can help with health questions, symptoms analysis, wellness advice, and medical document processing. What can I help you with today?";
+    if (lowerMessage.includes('headache') || lowerMessage.includes('head')) {
+      return "For headaches, I recommend: 1) Stay hydrated - drink plenty of water, 2) Get adequate rest in a quiet, dark room, 3) Apply a cold or warm compress, 4) Consider over-the-counter pain relievers like acetaminophen or ibuprofen. If headaches persist or worsen, please consult a healthcare professional.";
     }
-
-    // Specific health conditions and symptoms
-    if (lowerMessage.includes('headache') || lowerMessage.includes('migraine')) {
-      return "Headaches can have various causes - stress, dehydration, eye strain, or underlying conditions. For persistent headaches, I'd recommend consulting a healthcare provider. In the meantime, try staying hydrated, getting adequate rest, and managing stress. Would you like specific tips for headache relief?";
-    }
-
+    
     if (lowerMessage.includes('fever') || lowerMessage.includes('temperature')) {
-      return "Fever is your body's natural response to fighting infection. Normal body temperature is around 98.6°F (37°C). If you have a fever above 101°F (38.3°C) that persists, please consult a healthcare provider. Stay hydrated and rest. What other symptoms are you experiencing?";
+      return "For fever management: 1) Stay hydrated with water, clear broths, or electrolyte solutions, 2) Rest is crucial for recovery, 3) Use light clothing and keep room cool, 4) Consider fever reducers like acetaminophen or ibuprofen if needed. Seek medical attention if fever exceeds 103°F (39.4°C) or persists for more than 3 days.";
     }
-
-    if (lowerMessage.includes('pain') || lowerMessage.includes('hurt') || lowerMessage.includes('ache')) {
-      return "Pain can indicate various conditions depending on location and severity. For acute or severe pain, please seek immediate medical attention. For general aches, rest, ice/heat therapy, and over-the-counter pain relievers may help. Can you describe where the pain is located?";
+    
+    if (lowerMessage.includes('cold') || lowerMessage.includes('cough') || lowerMessage.includes('sneezing')) {
+      return "For cold symptoms: 1) Get plenty of rest to help your immune system fight the virus, 2) Stay hydrated with warm liquids like tea or soup, 3) Use a humidifier or breathe steam from hot shower, 4) Gargle with salt water for sore throat. Most colds resolve within 7-10 days. See a doctor if symptoms worsen or last longer than 2 weeks.";
     }
-
-    if (lowerMessage.includes('diet') || lowerMessage.includes('nutrition') || lowerMessage.includes('food')) {
-      return "Good nutrition is essential for health! A balanced diet should include fruits, vegetables, whole grains, lean proteins, and healthy fats. Stay hydrated and limit processed foods. Do you have specific dietary goals or restrictions I can help with?";
+    
+    if (lowerMessage.includes('stomach') || lowerMessage.includes('nausea') || lowerMessage.includes('digestive')) {
+      return "For digestive issues: 1) Try the BRAT diet (Bananas, Rice, Applesauce, Toast), 2) Stay hydrated with small, frequent sips of water, 3) Avoid dairy, fatty, or spicy foods temporarily, 4) Consider ginger tea for nausea. If symptoms persist beyond 24-48 hours or you have severe pain, please consult a healthcare provider.";
     }
-
-    if (lowerMessage.includes('exercise') || lowerMessage.includes('workout') || lowerMessage.includes('fitness')) {
-      return "Regular exercise is crucial for physical and mental health! Aim for at least 150 minutes of moderate aerobic activity weekly, plus strength training twice a week. Start gradually if you're new to exercise. What type of physical activity interests you?";
+    
+    if (lowerMessage.includes('sleep') || lowerMessage.includes('insomnia')) {
+      return "For better sleep: 1) Maintain a consistent sleep schedule, 2) Create a relaxing bedtime routine, 3) Keep your bedroom cool, dark, and quiet, 4) Avoid screens 1 hour before bed, 5) Limit caffeine after 2 PM. If sleep problems persist, consider consulting a sleep specialist.";
     }
-
-    if (lowerMessage.includes('sleep') || lowerMessage.includes('tired') || lowerMessage.includes('insomnia')) {
-      return "Quality sleep is vital for health! Adults need 7-9 hours nightly. Good sleep hygiene includes: consistent bedtime, comfortable environment, limiting screens before bed, and avoiding caffeine late in the day. Are you having trouble falling asleep or staying asleep?";
-    }
-
-    if (lowerMessage.includes('stress') || lowerMessage.includes('anxiety') || lowerMessage.includes('mental health')) {
-      return "Mental health is just as important as physical health. Stress management techniques include deep breathing, meditation, regular exercise, and talking to someone you trust. If you're experiencing persistent anxiety or depression, please consider speaking with a mental health professional. What's causing you stress?";
-    }
-
-    // Medicine and treatment queries
-    if (lowerMessage.includes('medicine') || lowerMessage.includes('medication') || lowerMessage.includes('drug')) {
-      return "I can provide general information about medications, but never replace professional medical advice. Always consult your doctor or pharmacist about specific medications, dosages, and interactions. What medication information are you looking for?";
-    }
-
-    // Emergency situations
-    if (lowerMessage.includes('emergency') || lowerMessage.includes('urgent') || lowerMessage.includes('severe')) {
-      return "For medical emergencies, please call emergency services immediately (911 in the US). Signs requiring immediate attention include: chest pain, difficulty breathing, severe bleeding, loss of consciousness, or stroke symptoms. Is this an emergency situation?";
-    }
-
-    // General health queries
-    if (lowerMessage.includes('health') || lowerMessage.includes('symptoms') || lowerMessage.includes('doctor') || 
-        lowerMessage.includes('treatment') || lowerMessage.includes('wellness') || lowerMessage.includes('medical')) {
-      return "I'm here to help with health-related questions! I can provide general health information, wellness tips, and guidance on when to seek professional care. Remember, I'm an AI assistant and my advice doesn't replace professional medical consultation. What specific health topic interests you?";
-    }
-
-    // Help requests
-    if (lowerMessage.includes('help') || lowerMessage.includes('what can you do')) {
-      return "I'm HealthAI, and I can help you with:\n• Health and wellness guidance\n• Symptom information and advice\n• Medical document analysis\n• Nutrition and fitness tips\n• When to seek professional care\n• General health education\n\nWhat health topic would you like to explore?";
-    }
-
-    // Thank you responses
-    if (lowerMessage.includes('thank') || lowerMessage.includes('thanks')) {
-      return "You're very welcome! I'm always here to help with your health questions and concerns. Stay healthy and feel free to ask anything else!";
-    }
-
-    // Document queries
-    if (lowerMessage.includes('document') || lowerMessage.includes('analyze') || lowerMessage.includes('upload')) {
-      return "I can analyze medical documents, lab reports, prescriptions, and health records. Upload your documents in the Document Manager section, and I'll help extract key information and provide insights. What type of document would you like me to analyze?";
-    }
-
-    // Insurance queries
-    if (lowerMessage.includes('claim') || lowerMessage.includes('insurance') || lowerMessage.includes('policy')) {
-      return "I can help with medical insurance questions, including understanding coverage, claim processes, and policy benefits. What insurance-related question do you have?";
-    }
-
-    // General conversation - more contextual
-    if (lowerMessage.includes('how are you') || lowerMessage.includes('how do you feel')) {
-      return "I'm doing well and ready to help! As an AI health assistant, I'm here 24/7 to support your health and wellness journey. How are you feeling today?";
-    }
-
-    if (lowerMessage.includes('what') || lowerMessage.includes('how') || lowerMessage.includes('why') || lowerMessage.includes('when')) {
-      return "I'd be happy to help answer your question! Could you provide more specific details about what you'd like to know? I'm especially knowledgeable about health, wellness, and medical topics.";
-    }
-
-    // Default response that encourages health-related conversation
-    return "I'm here to help with your health and wellness needs! Whether you have questions about symptoms, need wellness advice, want to discuss nutrition and fitness, or need help with medical documents, I'm ready to assist. What's on your mind today?";
+    
+    return "Thank you for your question. While I can provide general health information, it's important to remember that I'm an AI assistant and cannot replace professional medical advice. For specific symptoms or concerns, please consult with a qualified healthcare professional. Is there anything else about general health and wellness I can help you with?";
   };
 
   const handleSendMessage = async () => {
@@ -163,7 +103,7 @@ export function ChatInterface() {
     <div className="flex flex-col h-full">
       {/* Chat Messages */}
       <Card className="flex-1 mb-4 border-border shadow-soft">
-        <ScrollArea ref={scrollAreaRef} className={`${messages.length <= 2 ? 'h-[400px]' : 'h-[500px]'} p-4`}>
+        <ScrollArea ref={scrollAreaRef} className="h-[500px] p-4">
           <div className="space-y-4">
             {messages.map((message) => (
               <div
@@ -229,7 +169,7 @@ export function ChatInterface() {
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask about your health, symptoms, wellness tips, or medical documents..."
+            placeholder="Ask me about your health concerns..."
             className="flex-1 border-border focus:ring-primary"
             disabled={isTyping}
           />

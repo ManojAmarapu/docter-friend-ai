@@ -2,9 +2,9 @@ import { useState } from "react";
 import { 
   MessageCircle, 
   Search, 
-  FileText, 
+  Stethoscope, 
   TrendingUp, 
-  Bot,
+  Heart,
   Menu,
   X
 } from "lucide-react";
@@ -28,25 +28,25 @@ const navigationItems = [
     title: "AI Chat", 
     url: "/", 
     icon: MessageCircle,
-    description: "Ask document questions"
+    description: "Ask health questions"
   },
   { 
-    title: "Query Processor", 
-    url: "/query", 
+    title: "Disease Predictor", 
+    url: "/predict", 
     icon: Search,
-    description: "Process natural language"
+    description: "Predict possible conditions"
   },
   { 
-    title: "Document Manager", 
-    url: "/documents", 
-    icon: FileText,
-    description: "Upload & manage docs"
+    title: "Treatment Guide", 
+    url: "/treatment", 
+    icon: Stethoscope,
+    description: "Get treatment suggestions"
   },
   { 
-    title: "Claim Insights", 
+    title: "Health Insights", 
     url: "/insights", 
     icon: TrendingUp,
-    description: "View analytics"
+    description: "View health analytics"
   },
 ];
 
@@ -71,12 +71,12 @@ export function AppSidebar() {
         {/* Logo Section */}
         <div className="flex items-center gap-3 mb-8 px-2">
           <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center shadow-medical">
-            <Bot className="w-6 h-6 text-primary-foreground" />
+            <Heart className="w-6 h-6 text-primary-foreground" />
           </div>
           {!collapsed && (
             <div>
-              <h1 className="text-xl font-bold text-foreground">DocumentAI</h1>
-              <p className="text-sm text-muted-foreground">LLM Document Processor</p>
+              <h1 className="text-xl font-bold text-foreground">HealthAI</h1>
+              <p className="text-sm text-muted-foreground">Your AI Health Assistant</p>
             </div>
           )}
         </div>
@@ -114,14 +114,14 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Document Tip Section */}
+        {/* Health Tip Section */}
         {!collapsed && (
           <div className="mt-8 p-4 bg-gradient-medical rounded-lg shadow-soft">
             <h3 className="text-sm font-semibold text-accent-foreground mb-2">
-              💡 Processing Tip
+              💡 Health Tip
             </h3>
             <p className="text-xs text-accent-foreground opacity-90">
-              Upload policy documents for more accurate claim analysis and decision making.
+              Drink 8 glasses of water daily to stay hydrated and maintain optimal health.
             </p>
           </div>
         )}
